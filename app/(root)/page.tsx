@@ -1,21 +1,21 @@
 "use client";
 
-import { Modal } from "@/components/ui/modal";
+import { useStoreModal } from "@/hooks/use-store-modal";
 import { UserButton } from "@clerk/nextjs";
+import { useEffect } from "react";
 
 const SetupPage = () => {
-  return (
-    <div className="p-4">
-      <Modal
-        title="Test"
-        description="Test Description"
-        isOpen={true}
-        onClose={() => {}}
-      >
-        Children
-      </Modal>
-    </div>
-  );
+  //access state (global sotre) like this when using useEffect
+  const onOpen = useStoreModal((state) => state.onOpen);
+  const isOpen = useStoreModal((state) => state.isOpen);
+
+  useEffect(() => {
+    if (!isOpen) {
+      //Modal store is triggered on global store state - modal lies in app layout in ModalProvider
+      onOpen();
+    }
+  }, [isOpen, onOpen]);
+  return <div className="p-4">Root Page</div>;
 };
 
 export default SetupPage;
